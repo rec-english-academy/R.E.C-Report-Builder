@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>R.E.C Monthly Learning Report V3.0</title>
+<style>
+:root{--red:#ef2b2d;--red2:#fff0f0;--ink:#20242a;--muted:#6f7782;--line:#e4e7eb;--bg:#f3f5f7}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+.app{max-width:1660px;margin:auto;padding:16px;display:grid;grid-template-columns:minmax(560px,.95fr) minmax(650px,1.05fr);gap:16px}
+.card{background:#fff;border-radius:14px;box-shadow:0 4px 18px #00000010}.editor{padding:18px;max-height:calc(100vh - 32px);overflow:auto}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.top h1{margin:0;color:var(--red);font-size:22px}.top p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.mode{display:flex;gap:6px}.mode button,.rate button,.smallbtn,.chip,.add{border:1px solid #d8dde3;background:#fff;border-radius:9px;cursor:pointer}
+.mode button{padding:8px 10px;font-weight:700}.mode button.active,.rate button.active{background:var(--red);border-color:var(--red);color:#fff}
+.sec{margin-top:16px;padding-top:15px;border-top:1px solid var(--line)}.sec h2{font-size:14px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+label{font-size:11px;font-weight:700;display:block;margin-bottom:4px}input,select,textarea{width:100%;padding:8px 9px;border:1px solid #ccd2d9;border-radius:8px;font:inherit;background:#fff}
+textarea{min-height:62px;resize:vertical}.hint{font-size:11px;color:var(--muted);margin-top:6px}
+.skill{border:1px solid var(--line);border-radius:11px;margin:9px 0;overflow:hidden}.skillhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;background:#fafbfc}
+.skillname{font-size:13px;font-weight:800}.rate{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.rate button{font-size:11px;padding:6px 8px}
+.options{padding:9px 10px}.opt{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border-top:1px dashed #e4e4e4;padding:7px 0;font-size:12px;line-height:1.35}.opt:first-child{border-top:0}
+.add{padding:5px 8px;font-size:11px;white-space:nowrap}.add:hover{border-color:var(--red);color:var(--red)}.added{background:#effaf1!important;border-color:#8bcf98!important;color:#28783a!important}
+.tabs{display:flex;gap:5px;margin-bottom:8px}.smallbtn{padding:6px 9px;font-size:11px}.smallbtn.active{background:#222;color:#fff}
+.quick{display:flex;flex-wrap:wrap;gap:6px}.chip{padding:6px 9px;font-size:11px}.chip.on{background:var(--red2);border-color:#f4a2a2;color:#a30d0d}
+.actions{position:sticky;bottom:-18px;background:#fff;padding:12px 0 2px;display:flex;gap:7px;z-index:5}.actions button{flex:1;border:0;border-radius:9px;padding:10px;font-weight:800;cursor:pointer}.print{background:var(--red);color:#fff}.ghost{background:#eceff2}
+.preview{padding:14px;overflow:auto;max-height:calc(100vh - 32px)}.paper{width:210mm;min-height:297mm;background:#fff;margin:auto;padding:11mm 13mm;box-shadow:0 3px 15px #0002}
+.brand{display:flex;align-items:flex-start;justify-content:space-between}.logo{font-size:30px;color:var(--red);font-weight:900;letter-spacing:2px}.datep{font-size:11px}.title{text-align:center;color:var(--red);font-weight:900;font-size:18px;margin:3px 0 13px}
+.rsec{margin:10px 0}.rsec h3{font-size:12px;margin:0 0 7px}.info{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:11px}.u{border-bottom:1px dotted #777;display:inline-block;min-width:105px;padding:0 3px}
+table{border-collapse:collapse;width:100%;font-size:10.5px}th,td{border:1px solid #f05a5a;padding:6px;text-align:center;page-break-inside:avoid}th{font-weight:800}.left{text-align:left}
+.checks{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.comments{font-size:11px;line-height:1.5}.comments b{display:block;margin:7px 0 2px}.comment{white-space:pre-wrap;min-height:38px;border-bottom:1px dotted #888}
+.hide{display:none!important}.counter{font-size:10px;color:var(--muted);float:right}
+@media(max-width:1150px){.app{grid-template-columns:1fr}.editor,.preview{max-height:none}.paper{width:100%;min-height:auto}}
+@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}body{background:#fff}.app{display:block;padding:0}.editor{display:none}.card{box-shadow:none;border-radius:0}.preview{padding:0;overflow:visible;max-height:none}.paper{box-shadow:none;width:210mm;min-height:297mm;margin:0;padding:11mm 13mm}@page{size:A4;margin:0}}
+.empty{font-size:11px;color:var(--muted);padding:2px 0}.warn{color:#c00;font-weight:700}.comments,.rsec{break-inside:avoid;page-break-inside:avoid}.actions button{font-size:12px}
+.brand{align-items:center;margin-bottom:12px}.logobox{width:30mm}.logoimg{height:21mm;width:auto;display:block}.brand .title{flex:1;margin:0}.brand .datep{width:30mm;text-align:right}
+.signinput{display:block;width:240px;margin:30px 0 0 auto;padding:2px 0;border:0;border-bottom:1px dotted #bbb;border-radius:0;background:transparent;text-align:right;font:600 12px Arial,Helvetica,sans-serif;font-style:normal;color:var(--ink)}.signinput:focus{outline:none;border-bottom-color:var(--red)}
+@media print{.signinput{border-bottom-color:transparent}.signinput::placeholder{color:transparent}}
+.options{padding:2px 10px}.grp{border-top:1px dashed #e4e4e4}.grp:first-child{border-top:0}.grp summary{cursor:pointer;font-size:12px;font-weight:700;padding:8px 0;color:#444}.grp[open] summary{color:var(--red)}.grp .opt{border-top:1px dashed #eee}
+.comments{font-size:12.5px;line-height:1.55}#paper[data-mode=primary] .comments{font-size:11.5px;line-height:1.5}
+.unrated td{color:#c8c8c8}.unrated td:first-child{font-style:italic}
+@media print{.unrated{display:none}}
+.dupwarn{font-size:11px;color:#b45309;margin-top:3px}.dupwarn:empty{display:none}
+.grp summary.has{color:#28783a}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="card editor">
+<div class="top"><div><h1>R.E.C Report Builder V3.0</h1><p>Chọn → thêm nhận xét mẫu → chỉnh nếu cần → lưu PDF</p></div>
+<div class="mode"><button class="active" data-mode="preschool">Mầm non</button><button data-mode="primary">Tiểu học trở lên</button></div></div>
+
+<div class="sec"><h2>1. Thông tin học viên</h2>
+<div class="grid3">
+<div><label>Họ và tên *</label><input id="student" placeholder="Nhập tên học viên"></div>
+<div><label>Level *</label><select id="level"></select></div>
+<div><label>Giáo trình *</label><select id="book"></select></div>
+<div><label>Lớp</label><input id="className" placeholder="VD: EOW 2A"></div>
+<div><label>Giáo viên</label><input id="teacher" placeholder="Nhập 1 lần, hệ thống ghi nhớ"></div>
+<div><label>Ngày báo cáo</label><input id="date" type="date"></div>
+</div></div>
+
+<div class="sec preschool-fields"><h2>2. Nội dung học tập <span class="hint">(chỉ nhập nội dung thay đổi theo tháng)</span></h2>
+<div class="grid">
+<div><label>Chủ đề</label><input id="topic" placeholder="VD: My Body"></div>
+<div><label>Từ vựng chủ đề</label><select id="vocabStatus"></select></div>
+<div><label>Bài hát chủ đề</label><select id="songStatus"></select></div>
+<div><label>Câu chuyện chủ đề</label><select id="storyStatus"></select></div>
+<div><label>Phonics</label><select id="phonicsStatus"></select></div>
+<div><label>Video Speaking</label><select id="video1"></select></div>
+</div></div>
+
+<div class="sec primary-fields hide"><h2>2. Kết quả test giấy</h2>
+<div class="grid3"><div><label>Listening</label><input id="listenScore" placeholder="VD: 18 / 20"></div><div><label>Reading & Writing</label><input id="rwScore" placeholder="VD: 35 / 40"></div><div><label>Video Speaking</label><select id="video2"></select></div></div></div>
+
+<div class="sec"><h2 id="assessTitle">3. Đánh giá kỹ năng & chọn nhận xét mẫu</h2><div class="hint">① Chọn mức <b>Cần cải thiện – Đạt – Tốt</b> (chỉ để tick vào bảng, bấm lại để bỏ chọn). ② Mở từng nhóm “Câu mẫu” bên dưới để thêm nhận xét: danh sách có đủ câu của cả 3 mức, <b>không phụ thuộc</b> mức đã tick. Bấm nút lần nữa để gỡ câu.</div><div id="skills"></div></div>
+
+<div class="sec primary-fields hide"><h2>Đánh giá Speaking chi tiết</h2><div id="speaking"></div></div>
+
+<div class="sec"><h2>Cá nhân hóa nhanh</h2>
+<label>Điểm tích cực</label><div class="quick" id="pos"></div>
+<label style="margin-top:10px">Điểm cần phát triển</label><div class="quick" id="dev"></div>
+</div>
+
+<div class="sec"><h2>Nhận xét cuối <span class="counter" id="count"></span></h2>
+<label>Điểm nổi bật</label><textarea id="strength"></textarea>
+<label>Cần rèn thêm</label><textarea id="improve"></textarea>
+<label>Định hướng tháng tới</label><div class="quick" id="targets" style="margin:6px 0"></div><div class="hint" style="margin-top:8px">Gợi ý luyện tập ở nhà</div><div class="quick" id="home" style="margin:6px 0"></div><textarea id="next"></textarea>
+<div class="hint">Các ô trên vẫn chỉnh tay được khi cần, nhưng workflow mặc định là chọn mẫu.</div></div>
+
+<div class="sec"><h2>Nháp đã lưu <span class="hint">(lưu trên trình duyệt này)</span></h2><div class="grid"><select id="drafts"></select><div style="display:flex;gap:6px"><button class="smallbtn" id="loadDraft" type="button">Mở nháp</button><button class="smallbtn" id="delDraft" type="button">Xóa nháp</button></div></div><div style="display:flex;gap:6px;margin-top:8px"><button class="smallbtn" id="exportDrafts" type="button">Xuất file nháp</button><button class="smallbtn" id="importDrafts" type="button">Nhập file nháp</button><input type="file" id="importFile" accept=".json,application/json" class="hide"></div><div class="hint">File nháp chứa tên học viên – hãy bảo quản cẩn thận. Dùng để chuyển nháp sang máy khác.</div></div>
+<div class="actions"><button class="ghost" id="newStudent" type="button">Học viên mới</button><button class="ghost" id="clearComments" type="button">Xóa nhận xét</button><button class="ghost" id="saveDraft" type="button">Lưu nháp</button><button class="ghost" id="saveDefaults" type="button">Ghi nhớ GV/Lớp</button><button class="print" id="printBtn" type="button">In / Lưu PDF</button></div>
+</section>
+
+<section class="card preview"><article class="paper" id="paper">
+<div class="brand"><div class="logobox"><img class="logoimg" alt="R.E.C" src="data:image/png;base64,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"></div><div class="title">PHIẾU BÁO CÁO KẾT QUẢ HỌC TẬP<div id="pPeriod" style="font-size:12px;font-weight:600;color:#444;margin-top:2px"></div></div><div class="datep" id="pDate">Ngày: __/__/____</div></div>
+<div class="rsec"><h3>1. THÔNG TIN HỌC VIÊN</h3><div class="info">
+<div><b>Họ và tên học viên:</b> <span class="u" id="pStudent"></span></div><div><b>Lớp – Cấp độ:</b> <span class="u" id="pClassLevel"></span></div>
+<div><b>Giáo trình:</b> <span class="u" id="pBook"></span></div><div><b>Giáo viên phụ trách:</b> <span class="u" id="pTeacher"></span></div>
+</div></div>
+
+<div class="preschool-report">
+<div class="rsec"><h3>2. NỘI DUNG HỌC TẬP</h3><div style="font-size:11px;margin-bottom:5px"><b>Chủ đề:</b> <span id="pTopic"></span></div>
+<table><tr><td class="left">Từ vựng chủ đề</td><td id="pVocabStatus"></td></tr><tr><td class="left">Bài hát chủ đề</td><td id="pSongStatus"></td></tr><tr><td class="left">Câu chuyện chủ đề</td><td id="pStoryStatus"></td></tr><tr><td class="left">Phonics</td><td id="pPhonicsStatus"></td></tr></table></div>
+<div class="rsec"><h3>3. ĐÁNH GIÁ KỸ NĂNG (RUBRIC QUAN SÁT)</h3><table><thead><tr><th>Kỹ năng</th><th>Đạt</th><th>Tốt</th><th>Rất tốt</th></tr></thead><tbody id="pPreschoolTable"></tbody></table>
+<div style="font-size:11px;margin-top:6px"><b>Video Speaking:</b> <span id="pVideo1"></span></div></div>
+
+</div>
+
+<div class="primary-report hide">
+<div class="rsec"><h3>2. KẾT QUẢ TEST GIẤY</h3><table><tr><th>Kỹ năng</th><th>Điểm</th></tr><tr><td>Listening (Nghe)</td><td id="pListen"></td></tr><tr><td>Reading & Writing (Đọc & Viết)</td><td id="pRW"></td></tr></table><div style="font-size:11px;margin-top:6px"><b>Video Speaking:</b> <span id="pVideo2"></span></div></div>
+<div class="rsec"><h3>3. ĐÁNH GIÁ SPEAKING</h3><table><thead><tr><th>Tiêu chí</th><th>Cần cải thiện</th><th>Đạt</th><th>Tốt</th></tr></thead><tbody id="pSpeakingTable"></tbody></table></div>
+<div class="rsec"><h3>4. ĐÁNH GIÁ TỔNG HỢP</h3><table><thead><tr><th>Kỹ năng</th><th>Cần cải thiện</th><th>Đạt</th><th>Tốt</th></tr></thead><tbody id="pPrimaryTable"></tbody></table></div>
+
+</div>
+
+<div class="comments"><h3 id="pCommentTitle" style="font-size:12px;margin:10px 0 4px"></h3><b>Điểm nổi bật:</b><div class="comment" id="pStrength"></div><b>Cần rèn thêm:</b><div class="comment" id="pImprove"></div><b>Định hướng tháng tới:</b><div class="comment" id="pNext"></div></div>
+<div style="text-align:right;margin-top:18px;font-weight:800;font-style:italic;font-size:12px">Teacher<input id="signTeacher" class="signinput" placeholder="Gõ tên giáo viên" autocomplete="off"></div>
+</article></section>
+</div>
+
+<script>
+const LIB={
+preschool:{
+"Speaking":{
+"Đạt":{s:["Con đã có thể nói một số từ và cụm từ quen thuộc theo hướng dẫn của giáo viên.","Con bước đầu ghi nhớ và sử dụng được một số từ vựng đã học trong các hoạt động luyện nói.","Con có thể lặp lại từ/cụm từ và tham gia hoạt động Speaking khi được giáo viên gợi ý."],i:["Con cần được khuyến khích thêm để chủ động sử dụng tiếng Anh thay vì chờ giáo viên gợi ý.","Con cần luyện thêm phát âm một số từ quen thuộc để lời nói rõ ràng hơn."]},
+"Tốt":{s:["Con có thể sử dụng các cụm từ và câu ngắn theo chủ đề đã học.","Con trả lời khá tốt các câu hỏi đơn giản và quen thuộc trong lớp.","Con có phản xạ nói khá tốt và phát âm tương đối rõ các từ/câu quen thuộc.","Con ngày càng tự tin hơn khi sử dụng tiếng Anh để tương tác với giáo viên."],i:["Con có thể tiếp tục luyện để sử dụng mẫu câu chủ động và tự nhiên hơn."]},
+"Rất tốt":{s:["Con chủ động sử dụng tiếng Anh và không phụ thuộc nhiều vào sự gợi ý của giáo viên.","Con sử dụng tốt các mẫu câu quen thuộc và phản hồi tự nhiên trong các hoạt động giao tiếp.","Con phát âm rõ ràng và thể hiện ngữ điệu khá tự nhiên khi nói."],i:["Khuyến khích con mở rộng câu trả lời và vận dụng ngôn ngữ linh hoạt hơn."]}},
+"Listening":{
+"Đạt":{s:["Con nhận biết được các từ vựng quen thuộc khi nghe.","Con có thể nghe và thực hiện các yêu cầu đơn giản khi có hình ảnh hoặc cử chỉ hỗ trợ."],i:["Con cần luyện thêm để phản xạ nhanh hơn với các chỉ dẫn bằng tiếng Anh.","Con cần tăng khả năng nghe hiểu khi không có hình ảnh hoặc cử chỉ hỗ trợ."]},
+"Tốt":{s:["Con nghe hiểu tốt các chỉ dẫn đơn giản mà không cần nhiều hỗ trợ trực quan.","Con nhận biết khá tốt từ vựng đã học khi xuất hiện trong bài hát và câu chuyện.","Khả năng nghe hiểu của con đang phát triển tốt và ngày càng ổn định."],i:["Có thể tăng dần các hoạt động nghe không có hỗ trợ trực quan để phát triển khả năng nghe độc lập."]},
+"Rất tốt":{s:["Con nghe hiểu nhanh và có phản xạ tốt với các chỉ dẫn của giáo viên.","Con nắm bắt tốt nội dung chính của các bài hát và câu chuyện đã học.","Con phản hồi nhanh và chính xác với các câu hỏi, chỉ dẫn quen thuộc bằng tiếng Anh."],i:["Tiếp tục mở rộng nội dung nghe để phát triển khả năng xử lý ngôn ngữ tự nhiên hơn."]}},
+"Reading & Writing":{
+"Đạt":{s:["Con bước đầu nhận biết được một số chữ cái và âm đã học.","Con thực hiện được các hoạt động tô nét/tô chữ theo mẫu."],i:["Con cần tiếp tục củng cố khả năng nhận diện chữ cái và âm đã học.","Con cần luyện thêm phonics để tăng khả năng ghi nhớ và phản xạ với âm."]},
+"Tốt":{s:["Con nhận diện khá tốt các từ quen thuộc đã học.","Con thực hiện tốt các hoạt động nối chữ với hình ảnh.","Con đang phát triển tốt các kỹ năng tiền đọc – viết phù hợp với độ tuổi."],i:["Tiếp tục tăng cơ hội nhận diện từ và kết nối âm – chữ – hình ảnh."]},
+"Rất tốt":{s:["Con chủ động nhận diện mặt chữ và đọc theo các từ quen thuộc.","Con thực hiện tốt các hoạt động tô/viết chữ theo mẫu, nét chữ rõ và đúng hướng.","Con thể hiện nền tảng phonics và tiền đọc – viết tốt so với yêu cầu hiện tại."],i:["Tiếp tục phát triển sự tự tin với phonics và các hoạt động tiền đọc – viết."]}},
+"Tương tác lớp học":{
+"Đạt":{s:["Con tham gia các hoạt động trên lớp khi được giáo viên khuyến khích.","Con đang dần làm quen và tự tin hơn với các hoạt động tương tác trên lớp."],i:["Con cần được khuyến khích thêm để chủ động tham gia các hoạt động.","Con đôi lúc còn rụt rè và cần thêm cơ hội để thể hiện bản thân."]},
+"Tốt":{s:["Con tham gia tích cực phần lớn các hoạt động trên lớp.","Con hợp tác tốt với giáo viên và các bạn trong các hoạt động chung.","Con có thái độ học tập tích cực và ngày càng tự tin hơn trong lớp."],i:["Tiếp tục tạo cơ hội để con chủ động phát biểu và thể hiện bản thân."]},
+"Rất tốt":{s:["Con rất chủ động tham gia và tích cực giơ tay trả lời.","Con tự tin thể hiện bản thân trong các hoạt động bài hát và kể chuyện.","Con tương tác tích cực với giáo viên và các bạn trong suốt giờ học."],i:["Tiếp tục phát huy sự tự tin và vai trò tích cực của con trong các hoạt động nhóm."]}}
+},
+primary:{
+"Speaking":{
+"Cần cải thiện":{s:["Con đã tham gia các hoạt động Speaking và đang từng bước hình thành sự tự tin khi giao tiếp."],i:["Con cần thêm thời gian để xử lý câu hỏi và diễn đạt câu trả lời bằng tiếng Anh.","Con đã ghi nhớ một số từ và mẫu câu nhưng cần luyện thêm cách sử dụng chúng trong giao tiếp.","Con cần luyện thêm phát âm để lời nói rõ ràng và chính xác hơn.","Con đôi lúc còn phụ thuộc vào tiếng Việt và cần được khuyến khích sử dụng tiếng Anh thường xuyên hơn."]},
+"Đạt":{s:["Con trả lời được các câu hỏi quen thuộc theo chủ đề đã học.","Con sử dụng được các mẫu câu cơ bản trong các hoạt động Speaking.","Con phát âm tương đối rõ và có thể truyền đạt được nội dung cần nói."],i:["Con cần tiếp tục luyện để tăng độ trôi chảy và sử dụng mẫu câu chủ động hơn."]},
+"Tốt":{s:["Con nói tương đối trôi chảy và tự tin trong các tình huống giao tiếp quen thuộc.","Con vận dụng tốt nhiều mẫu câu đã học trong phần Speaking.","Con có phản xạ nói tốt và trả lời khá nhanh các câu hỏi của giáo viên.","Con phát âm rõ và thể hiện sự tự tin khi giao tiếp bằng tiếng Anh."],i:["Khuyến khích con mở rộng câu trả lời và sử dụng ngôn ngữ linh hoạt hơn."]}},
+"Listening":{
+"Cần cải thiện":{s:["Con đã nhận biết được một phần nội dung nghe quen thuộc."],i:["Con cần thêm thời gian để xử lý nội dung nghe và đôi lúc cần nghe lại nhiều lần.","Con còn gặp khó khăn khi theo dõi một số chỉ dẫn bằng tiếng Anh.","Con cần luyện nghe thường xuyên hơn để cải thiện tốc độ phản xạ."]},
+"Đạt":{s:["Con nghe hiểu được nội dung chính của các bài nghe phù hợp với cấp độ.","Con hoàn thành được các dạng bài Listening quen thuộc.","Con nhận biết được các thông tin chính trong những đoạn hội thoại quen thuộc."],i:["Tiếp tục phát triển khả năng nghe chi tiết và phản xạ với chỉ dẫn."]},
+"Tốt":{s:["Con nghe hiểu nhanh và có phản xạ tốt với các chỉ dẫn bằng tiếng Anh.","Con nắm bắt tốt nội dung chính của các đoạn hội thoại và bài nghe.","Con hoàn thành tốt các dạng bài Listening và phản hồi khá chính xác."],i:["Tiếp tục luyện với nội dung dài và đa dạng hơn để duy trì khả năng nghe hiểu."]}},
+"Reading & Writing":{
+"Cần cải thiện":{s:["Con đang từng bước phát triển kỹ năng đọc – viết theo yêu cầu của cấp độ."],i:["Con cần luyện đọc thường xuyên hơn để tăng tốc độ và độ chính xác.","Con cần củng cố cấu trúc câu để viết câu chính xác hơn.","Con cần chú ý hơn đến từ vựng và cấu trúc khi hoàn thành các bài viết."]},
+"Đạt":{s:["Con đọc hiểu được các đoạn văn ngắn phù hợp với cấp độ.","Con viết được các câu đơn giản theo mẫu và cấu trúc đã học.","Con hoàn thành được các yêu cầu Reading & Writing cơ bản."],i:["Tiếp tục mở rộng vốn từ và luyện viết câu độc lập."]},
+"Tốt":{s:["Con đọc hiểu tốt nội dung bài và xác định khá chính xác các thông tin cần thiết.","Con viết câu rõ ràng và sử dụng khá chính xác các cấu trúc đã học.","Con vận dụng tốt vốn từ và cấu trúc trong các hoạt động đọc – viết."],i:["Khuyến khích con mở rộng câu và vận dụng từ vựng/cấu trúc đa dạng hơn."]}},
+"Tương tác lớp học":{
+"Cần cải thiện":{s:["Con tham gia một số hoạt động trên lớp khi được giáo viên khuyến khích."],i:["Con đôi lúc còn thụ động và cần giáo viên khuyến khích để tham gia hoạt động.","Con cần chủ động hơn khi phát biểu và trao đổi trong lớp.","Con cần tăng sự tập trung và tham gia ổn định hơn trong các hoạt động học tập."]},
+"Đạt":{s:["Con tham gia phần lớn các hoạt động trên lớp và hợp tác tốt với giáo viên.","Con phối hợp khá tốt với các bạn trong các hoạt động cặp/nhóm.","Con có thái độ học tập nghiêm túc và đáp ứng tốt các yêu cầu cơ bản trên lớp."],i:["Tiếp tục phát triển sự chủ động và tự tin khi tham gia lớp học."]},
+"Tốt":{s:["Con chủ động phát biểu và tích cực tham gia các hoạt động trên lớp.","Con tích cực làm việc nhóm và tương tác tốt với các bạn.","Con thể hiện thái độ học tập tích cực, tự tin và chủ động."],i:["Tiếp tục phát huy tinh thần học tập tích cực và khả năng tương tác với các bạn."]}}
+}};
+const TARGETS=["Tiếp tục tăng cơ hội luyện nói để con sử dụng từ vựng và mẫu câu đã học một cách chủ động hơn.","Tập trung phát triển phản xạ hỏi – đáp và khuyến khích con mở rộng câu trả lời.","Tiếp tục luyện phát âm và ngữ điệu thông qua các hoạt động nghe – nhắc lại và giao tiếp.","Tăng cường luyện nghe các chỉ dẫn và nội dung phù hợp với cấp độ để cải thiện tốc độ phản xạ.","Tiếp tục củng cố phonics và khả năng kết nối âm – chữ – hình ảnh.","Duy trì luyện đọc thường xuyên để tăng tốc độ, độ chính xác và khả năng hiểu nội dung.","Tập trung củng cố cấu trúc câu và tăng cơ hội viết câu độc lập.","Khuyến khích con chủ động phát biểu và tham gia nhiều hơn vào các hoạt động giao tiếp.","Tiếp tục phát huy những kỹ năng con đang thực hiện tốt, đồng thời củng cố những nội dung chưa ổn định."];
+const POS={"Tiến bộ rõ":"Trong tháng này, con cho thấy sự tiến bộ tích cực và ngày càng tự tin hơn trong quá trình học.","Ghi nhớ nhanh":"Con có khả năng ghi nhớ khá nhanh các nội dung đã học và vận dụng tốt trong các hoạt động quen thuộc.","Chăm chỉ":"Con có thái độ học tập chăm chỉ và nghiêm túc trong các hoạt động trên lớp.","Tự tin":"Con thể hiện sự tự tin khi tham gia và sẵn sàng thể hiện khả năng của mình.","Chủ động":"Con chủ động tham gia và có tinh thần học tập tích cực.","Hợp tác tốt":"Con hợp tác tốt với giáo viên và các bạn trong các hoạt động chung."};
+const DEV={"Còn rụt rè":"Con đôi lúc còn khá rụt rè và cần thêm sự khuyến khích để chủ động thể hiện bản thân.","Cần tập trung hơn":"Con cần duy trì sự tập trung ổn định hơn để đạt hiệu quả tốt trong các hoạt động học tập.","Cần phản xạ nhanh hơn":"Con cần thêm thời gian luyện tập để tăng tốc độ phản xạ khi sử dụng tiếng Anh.","Cần luyện phát âm":"Con cần luyện thêm phát âm để lời nói rõ ràng và chính xác hơn.","Cần củng cố từ vựng":"Con cần tiếp tục củng cố từ vựng để sử dụng ngôn ngữ chính xác và chủ động hơn."};
+const LEVELS={preschool:["Pre-Starters"],primary:["Starters (Pre A1)","Movers (A1)","Flyers (A2)","KET (A2 Key)","PET (B1 Preliminary)"]};
+const BOOKS={preschool:["Learn with Ollie 1","Learn with Ollie 2","Learn with Ollie 3","Khác"],primary:["Explore Our World 1","Explore Our World 2","Explore Our World 3","Explore Our World 4","Explore Our World 5","Khác"]};
+const STATUS={vocabStatus:["Nhận biết","Ghi nhớ","Sử dụng"],songStatus:["Tham gia","Hát theo","Hát chủ động"],storyStatus:["Nghe hiểu","Trả lời","Kể lại"],phonicsStatus:["Nhận biết","Ghi nhớ","Sử dụng"],video1:["Đã gửi","Chưa gửi"],video2:["Đã gửi","Chưa gửi"]};
+const STATUS_LABEL={vocabStatus:"Từ vựng chủ đề",songStatus:"Bài hát chủ đề",storyStatus:"Câu chuyện chủ đề",phonicsStatus:"Phonics",video1:"Video Speaking",video2:"Video Speaking"};
+const PRIMARY_SCALE=["Cần cải thiện","Đạt","Tốt"];
+const SPEAK={
+"Phát âm":{
+"Cần cải thiện":{s:["Con sẵn sàng nhắc lại từ/cụm từ khi được giáo viên hướng dẫn."],i:["Con cần luyện thêm phát âm các từ quen thuộc, đặc biệt là âm cuối, để lời nói rõ ràng hơn.","Con cần nghe – nhắc lại thường xuyên hơn để cải thiện ngữ điệu và trọng âm."]},
+"Đạt":{s:["Con phát âm tương đối rõ các từ quen thuộc."],i:["Một số âm cuối và trọng âm cần được luyện thêm."]},
+"Tốt":{s:["Con phát âm khá rõ, đúng phần lớn các âm và sử dụng ngữ điệu tương đối phù hợp.","Con phát âm rõ ràng và sử dụng ngữ điệu tự nhiên khi giao tiếp."],i:["Tiếp tục luyện ngữ điệu và nhịp điệu câu để lời nói tự nhiên hơn."]}},
+"Từ vựng – mẫu câu":{
+"Cần cải thiện":{s:["Con đã ghi nhớ một số từ vựng và mẫu câu cơ bản."],i:["Con cần luyện thêm cách sử dụng từ vựng và mẫu câu đã học trong giao tiếp.","Con còn phụ thuộc vào gợi ý của giáo viên khi cần diễn đạt ý."]},
+"Đạt":{s:["Con sử dụng được từ vựng theo chủ đề và các mẫu câu đơn giản đã học."],i:["Con cần mở rộng vốn từ và đa dạng hóa mẫu câu."]},
+"Tốt":{s:["Con sử dụng vốn từ khá đa dạng và kết hợp được nhiều mẫu câu.","Con vận dụng từ vựng linh hoạt và ít phụ thuộc vào gợi ý."],i:["Khuyến khích con sử dụng mẫu câu mở rộng trong các tình huống mới."]}},
+"Phản xạ giao tiếp":{
+"Cần cải thiện":{s:["Con đã tham gia trả lời khi được giáo viên đặt câu hỏi."],i:["Con cần thêm thời gian để xử lý câu hỏi và cần luyện hỏi – đáp thường xuyên hơn.","Con đôi lúc còn dùng tiếng Việt và cần được khuyến khích sử dụng tiếng Anh nhiều hơn."]},
+"Đạt":{s:["Con trả lời được các câu hỏi quen thuộc."],i:["Con đôi lúc cần thêm thời gian suy nghĩ; cần luyện phản xạ nhanh hơn."]},
+"Tốt":{s:["Con phản xạ khá nhanh và duy trì được các đoạn hội thoại ngắn.","Con chủ động mở rộng câu trả lời và giao tiếp tự tin."],i:["Khuyến khích con kéo dài hội thoại và đặt câu hỏi ngược lại."]}}
+};
+const TARGET_LABELS=["Speaking","Hỏi – đáp","Pronunciation","Listening","Phonics","Reading","Writing","Interaction","General"];
+const FIELDS=["student","level","book","className","teacher","date","topic","vocabStatus","songStatus","storyStatus","phonicsStatus","video1","video2","listenScore","rwScore","strength","improve","next"];
+/* ---- V3.0: câu mẫu riêng theo cấp độ Cambridge (chỉ chế độ Tiểu học+) ---- */
+const LEVEL_LIB={
+Starters:{
+"Listening":{s:["Con nghe và nối/tô màu đúng theo yêu cầu trong các bài nghe dạng Starters.","Con nhận ra được tên, số và màu sắc quen thuộc khi nghe audio.","Con nghe hiểu các câu chỉ dẫn ngắn bằng tiếng Anh."],i:["Con cần luyện nghe số và chữ cái đánh vần để tránh nhầm khi làm bài.","Con cần nghe audio nhiều hơn ở nhà để quen tốc độ nói của bài thi."]},
+"Reading & Writing":{s:["Con đọc và nối từ với tranh khá chính xác.","Con sao chép và viết đúng chính tả các từ quen thuộc.","Con hoàn thành được câu đơn giản có gợi ý theo dạng bài Starters."],i:["Con cần luyện viết đúng chính tả các từ vựng theo chủ đề.","Con cần luyện đọc kỹ yêu cầu trước khi làm để tránh sai dạng bài."]},
+"Speaking":{s:["Con trả lời được các câu hỏi đơn giản về tranh và bản thân.","Con nói tên đồ vật và màu sắc rõ ràng, tự tin.","Con dám nói và phản hồi khi giám khảo đặt câu hỏi."],i:["Con cần luyện trả lời bằng cả câu ngắn thay vì chỉ nói một từ.","Con cần luyện nói to, rõ hơn khi trả lời để giám khảo dễ nghe."]}},
+Movers:{
+"Listening":{s:["Con nghe và nắm được thông tin chi tiết như tên, số, thời gian trong bài Movers.","Con theo dõi được đoạn hội thoại ngắn và chọn đúng đáp án.","Con ghi lại được từ khóa khi nghe khá chính xác."],i:["Con cần luyện nghe các thông tin dễ gây nhầm lẫn như số, ngày, thời gian.","Con cần luyện nghe lướt để bắt từ khóa trước khi audio phát."]},
+"Reading & Writing":{s:["Con đọc hiểu đoạn văn ngắn và trả lời đúng phần lớn câu hỏi.","Con hoàn thành câu và đoạn ngắn với từ cho sẵn khá chính xác.","Con viết được 1–2 câu đủ ý về tranh hoặc chủ đề quen thuộc."],i:["Con cần luyện đọc kỹ đoạn văn trước khi chọn đáp án.","Con cần chú ý chia động từ và dùng đúng thì trong các câu viết."]},
+"Speaking":{s:["Con mô tả tranh và so sánh các điểm khác nhau khá rõ ràng.","Con trả lời được các câu hỏi cá nhân bằng câu hoàn chỉnh.","Con phản hồi tự nhiên với giám khảo trong phần hỏi – đáp."],i:["Con cần luyện mô tả tranh với nhiều chi tiết hơn.","Con cần luyện dùng đủ chủ ngữ – động từ khi nói để câu trọn ý."]}},
+Flyers:{
+"Listening":{s:["Con nghe hiểu hội thoại dài hơn và chọn đúng thông tin trong bài Flyers.","Con phân biệt tốt thông tin chính và thông tin gây nhiễu.","Con duy trì sự tập trung ổn định đến hết bài nghe."],i:["Con cần luyện nghe các đoạn hội thoại có đổi ý hoặc sửa thông tin.","Con cần luyện ghi chú nhanh và chính xác khi nghe."]},
+"Reading & Writing":{s:["Con đọc hiểu các đoạn văn dài hơn và trả lời chính xác.","Con viết được đoạn ngắn kể lại câu chuyện theo tranh có mạch lạc.","Con sử dụng khá đúng thì quá khứ và các từ nối cơ bản khi viết."],i:["Con cần luyện viết đoạn có đủ số từ và đủ ý theo yêu cầu đề bài.","Con cần ôn kỹ chia động từ và giới từ để giảm lỗi ngữ pháp."]},
+"Speaking":{s:["Con kể lại câu chuyện theo tranh khá trôi chảy và có trình tự.","Con trả lời câu hỏi của giám khảo bằng câu đầy đủ, mở rộng ý.","Con dùng được thì quá khứ và từ vựng đa dạng khi nói."],i:["Con cần luyện kể chuyện với nhiều chi tiết và từ nối hơn.","Con cần luyện mở rộng câu trả lời thay vì dừng ở một câu ngắn."]}},
+KET:{
+"Listening":{s:["Con nghe và nắm bắt thông tin trong các dạng bài KET khá chính xác.","Con nhận ra được thông tin cụ thể trong hội thoại, thông báo ngắn.","Con quản lý tốt việc đọc câu hỏi trước khi nghe."],i:["Con cần luyện nghe các đoạn có nhiều thông tin gây nhiễu.","Con cần luyện nghe với nhiều giọng và tốc độ khác nhau."]},
+"Reading & Writing":{s:["Con đọc hiểu biển báo, tin nhắn, đoạn văn ngắn khá tốt.","Con viết được tin nhắn hoặc email ngắn đủ ý theo yêu cầu.","Con nắm chắc các cấu trúc ngữ pháp trình độ A2 đã học."],i:["Con cần luyện quản lý thời gian để hoàn thành đủ các phần của bài Reading & Writing.","Con cần luyện viết đúng số từ yêu cầu và đủ các ý đề bài đưa ra."]},
+"Speaking":{s:["Con trao đổi thông tin cá nhân và chủ đề quen thuộc khá tự nhiên.","Con biết hỏi và trả lời tương tác với bạn cùng thi.","Con phát âm khá rõ để giám khảo hiểu ý."],i:["Con cần luyện mở rộng câu trả lời với lý do hoặc ví dụ.","Con cần luyện hỏi lại và phản hồi với bạn cùng thi tự nhiên hơn."]}},
+PET:{
+"Listening":{s:["Con nghe hiểu nhiều dạng bài PET và chọn đúng thông tin chính.","Con nhận ra được ý kiến, thái độ của người nói trong các đoạn hội thoại.","Con duy trì sự tập trung tốt xuyên suốt bài nghe."],i:["Con cần luyện nghe chi tiết các đoạn dài có thông tin chuyển đổi.","Con cần luyện kỹ thuật dự đoán đáp án trước khi nghe."]},
+"Reading & Writing":{s:["Con đọc hiểu các văn bản dài và xác định ý chính khá chính xác.","Con viết email/bài viết có bố cục rõ ràng và đủ ý.","Con dùng được đa dạng cấu trúc và từ vựng trình độ B1."],i:["Con cần luyện đa dạng hóa từ vựng và cấu trúc câu trong bài viết.","Con cần rà soát lỗi ngữ pháp, chính tả trước khi nộp bài viết."]},
+"Speaking":{s:["Con mô tả ảnh và trình bày ý kiến cá nhân khá mạch lạc.","Con tham gia thảo luận và biết đưa ra, đáp lại ý kiến cùng bạn thi.","Con phát âm và ngữ điệu khá tự nhiên, dễ hiểu."],i:["Con cần luyện phát triển ý với lý do và ví dụ cụ thể hơn.","Con cần luyện dùng thêm từ nối và cụm từ thể hiện ý kiến."]}}
+};
+const HOME={"Nghe mỗi ngày":"Phụ huynh nhắc con nghe lại audio bài học khoảng 10–15 phút mỗi ngày.","Ôn từ vựng":"Con ôn từ vựng bằng flashcard 5–10 từ mỗi ngày và đặt câu với từ mới.","Làm bài tập":"Con hoàn thành bài tập về nhà đầy đủ và gửi đúng hạn.","Luyện nói":"Con nói chuyện hoặc kể lại bài học bằng tiếng Anh với người thân vài phút mỗi ngày.","Thi thử":"Con làm đề thi thử đúng thời gian để quen áp lực và cấu trúc bài thi."};
+function renderExtras(){
+ document.querySelectorAll("#skills .skill").forEach(el=>{
+  const box=el.querySelector(".extra");if(!box)return;box.innerHTML="";
+  const lvl=($("level").value||"").split(" ")[0],d=mode==="primary"&&LEVEL_LIB[lvl]&&LEVEL_LIB[lvl][el.querySelector(".skillname").textContent];
+  if(d)renderGroups({[lvl]:d},[lvl],box,(l,n)=>"★ Câu mẫu riêng cho cấp độ “"+l+"” – bám sát Cambridge ("+n+" câu)");
+ });
+ refreshMarks();
+}
+let mode=null,ratings={},speakRatings={},marks=[];
+const $=id=>document.getElementById(id);
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+function fill(id,arr,blank){$(id).innerHTML=(blank?'<option value="">— Chọn —</option>':'')+arr.map(x=>`<option>${x}</option>`).join("")}
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+
+/* ---- text helpers ---- */
+function has(id,t){return $(id).value.includes(t)}
+function addText(id,t){const a=$(id),c=a.value.trim();if(c.includes(t))return;a.value=c?c+" "+t:t}
+function removeText(id,t){const a=$(id);a.value=a.value.replace(t,"").replace(/ {2,}/g," ").trim()}
+function hasComments(){return ["strength","improve","next"].some(k=>$(k).value.trim())}
+
+/* ---- gắn nhãn chủ đề để phát hiện lặp ý ---- */
+const TAGS=[["phát âm",/phát âm|ngữ điệu|trọng âm|âm cuối/],["phonics",/phonics|âm – chữ|chữ cái|mặt chữ/],["từ vựng",/từ vựng|vốn từ|từ quen thuộc/],["mẫu câu",/mẫu câu|cấu trúc/],["phản xạ",/phản xạ|phản hồi nhanh/],["tập trung",/tập trung/],["tự tin",/tự tin|rụt rè|thể hiện bản thân/],["chủ động",/chủ động|phát biểu|giơ tay/],["hợp tác",/hợp tác|làm việc nhóm|cặp\/nhóm|phối hợp/],["thái độ học tập",/thái độ|chăm chỉ|nghiêm túc/],["tiến bộ",/tiến bộ/],["nghe",/nghe|chỉ dẫn/],["đọc – viết",/đọc|viết|tô nét|tô chữ|tô\/viết/],["hỏi – đáp / giao tiếp",/giao tiếp|hội thoại|trả lời|câu hỏi/]];
+const KNOWN=new Map();
+function tagOf(t){const l=t.toLowerCase();for(const [n,re] of TAGS)if(re.test(l))return n;return null}
+function dupReport(field){
+ const v=$(field).value,cnt={};
+ KNOWN.forEach((tag,text)=>{if(tag&&v.includes(text))cnt[tag]=(cnt[tag]||0)+1});
+ return Object.entries(cnt).filter(([,n])=>n>=2).map(([t,n])=>t+" ("+n+" câu)");
+}
+/* ---- toggle buttons (sentence / chip): click again to remove ---- */
+function mkToggle(btn,field,text,offTxt,cls){
+ marks.push({btn,field,text,offTxt,cls});KNOWN.set(text,tagOf(text));
+ btn.onclick=()=>{has(field,text)?removeText(field,text):addText(field,text);sync()};
+}
+function refreshMarks(){
+ marks=marks.filter(m=>document.body.contains(m.btn));
+ marks.forEach(m=>{const on=has(m.field,m.text);m.btn.classList.toggle(m.cls,on);if(m.offTxt)m.btn.textContent=on?"✓ Đã thêm (bấm để gỡ)":m.offTxt});
+ document.querySelectorAll("details.grp").forEach(g=>{const k=g.querySelectorAll(".add.added").length,sm=g.querySelector("summary");sm.textContent=g.dataset.base+(k?" · đã chọn "+k:"");sm.classList.toggle("has",k>0)});
+}
+
+/* ---- rater (skill → level → sample sentences). Default: NOT rated ---- */
+function renderGroups(lv,levels,box,label){
+ box.innerHTML="";
+ levels.forEach(l=>{
+  const d=lv[l],det=document.createElement("details");det.className="grp";
+  const sm=document.createElement("summary");sm.textContent=label?label(l,d.s.length+d.i.length):"Câu mẫu mức “"+l+"” ("+(d.s.length+d.i.length)+" câu)";det.appendChild(sm);det.dataset.base=sm.textContent;
+  [...d.s.map(x=>["s",x]),...d.i.map(x=>["i",x])].forEach(([kind,text])=>{
+   const row=document.createElement("div");row.className="opt";
+   const sp=document.createElement("span");sp.textContent=text;
+   const b=document.createElement("button");b.className="add";b.type="button";b.textContent=kind==="s"?"+ Nổi bật":"+ Rèn thêm";
+   row.append(sp,b);det.appendChild(row);
+   mkToggle(b,kind==="s"?"strength":"improve",text,b.textContent,"added");
+  });
+  box.appendChild(det);
+ });
+}
+/* Mức đánh giá (tick bảng) và câu nhận xét mẫu hoàn toàn độc lập với nhau */
+function buildRater(boxId,data,store){
+ const box=$(boxId);box.innerHTML="";Object.keys(store).forEach(k=>delete store[k]);
+ Object.entries(data).forEach(([skill,lv])=>{
+  store[skill]=null;
+  const levels=Object.keys(lv);
+  const el=document.createElement("div");el.className="skill";
+  el.innerHTML=`<div class="skillhead"><div class="skillname"></div><div class="rate">${levels.map(l=>`<button type="button" data-l="${l}">${l}</button>`).join("")}</div></div><div class="options"></div><div class="options extra"></div>`;
+  el.querySelector(".skillname").textContent=skill;
+  box.appendChild(el);
+  renderGroups(lv,levels,el.querySelector(".options:not(.extra)"));
+  el.querySelectorAll(".rate button").forEach(b=>b.onclick=()=>{
+   const next=store[skill]===b.dataset.l?null:b.dataset.l;
+   store[skill]=next;
+   el.querySelectorAll(".rate button").forEach(x=>x.classList.toggle("active",x.dataset.l===next));
+   sync();
+  });
+ });
+}
+function rebuild(){buildRater("skills",LIB[mode],ratings);buildRater("speaking",SPEAK,speakRatings);renderExtras()}
+function applyRatings(boxId,obj){
+ document.querySelectorAll("#"+boxId+" .skill").forEach(el=>{
+  const k=el.querySelector(".skillname").textContent,l=obj&&obj[k];
+  if(l){const b=[...el.querySelectorAll(".rate button")].find(x=>x.dataset.l===l);if(b)b.click()}
+ });
+}
+
+/* ---- chips ---- */
+function chips(id,obj,target){
+ const box=$(id);box.innerHTML="";
+ Object.entries(obj).forEach(([k,v])=>{const b=document.createElement("button");b.className="chip";b.textContent=k;box.appendChild(b);mkToggle(b,target,v,null,"on")});
+}
+
+/* ---- preview ---- */
+function checks(v,levels){return levels.map(x=>(x===v?"☑ ":"☐ ")+x).join("    ")}
+function reportTitle(){
+ const n=($("student").value.trim()||"Report").replace(/[\\\/:*?"<>|]/g,"").replace(/\s+/g,"_");
+ return "REC_"+n+"_"+($("date").value||"").slice(0,7);
+}
+function sync(){
+ const d=$("date").value;$("pDate").textContent=d?"Ngày: "+d.split("-").reverse().join("/"):"Ngày: __/__/____";
+ $("pPeriod").textContent=d?"Kỳ báo cáo: Tháng "+d.split("-")[1]+"/"+d.split("-")[0]:"";$("pStudent").textContent=$("student").value;$("pClassLevel").textContent=[$("className").value,$("level").value].filter(Boolean).join(" – ");
+ $("pBook").textContent=$("book").value;$("pTeacher").textContent=$("teacher").value;if(document.activeElement!==$("signTeacher"))$("signTeacher").value=$("teacher").value;
+ $("pTopic").textContent=$("topic").value;
+ [["vocabStatus","pVocabStatus"],["songStatus","pSongStatus"],["storyStatus","pStoryStatus"],["phonicsStatus","pPhonicsStatus"]].forEach(([f,p])=>$(p).textContent=checks($(f).value,STATUS[f]));
+ $("pVideo1").textContent=$("video1").value||"—";$("pVideo2").textContent=$("video2").value||"—";
+ $("pListen").textContent=$("listenScore").value||"—";$("pRW").textContent=$("rwScore").value||"—";
+ $("pStrength").textContent=$("strength").value;$("pImprove").textContent=$("improve").value;$("pNext").textContent=$("next").value;
+ $("pCommentTitle").textContent=(mode==="preschool"?"4":"5")+". NHẬN XÉT GIÁO VIÊN";
+ const row=(k,store,cols)=>`<tr class="${store[k]?"":"unrated"}" title="${store[k]?"":"Chưa đánh giá – dòng này sẽ ẩn khi in"}"><td class="left"></td>${cols.map(l=>`<td>${store[k]===l?"✓":""}</td>`).join("")}</tr>`;
+ const fillTable=(id,store,cols)=>{const tb=$(id);tb.innerHTML=Object.keys(store).map(k=>row(k,store,cols)).join("");[...tb.rows].forEach((r,i)=>r.cells[0].textContent=Object.keys(store)[i])};
+ fillTable("pPreschoolTable",ratings,["Đạt","Tốt","Rất tốt"]);
+ fillTable("pPrimaryTable",ratings,PRIMARY_SCALE);
+ fillTable("pSpeakingTable",speakRatings,PRIMARY_SCALE);
+ refreshMarks();
+ $("paper").dataset.mode=mode;
+ ["strength","improve","next"].forEach(f=>{const r=dupReport(f);$("dup_"+f).textContent=r.length?"⚠ Có thể lặp ý về: "+r.join(", ")+". Kiểm tra lại các câu đã chọn.":""});
+ document.title=reportTitle();
+ const chars=$("strength").value.length+$("improve").value.length+$("next").value.length;
+ const over=window.innerWidth>1150&&$("paper").offsetHeight>1130;
+ $("count").innerHTML=chars+" ký tự"+(over?' · <span class="warn">⚠ Phiếu dài hơn 1 trang A4</span>':"");
+}
+
+/* ---- mode ---- */
+function setMode(m,silent){
+ if(m!==mode&&mode&&!silent&&hasComments()&&!confirm("Đổi chế độ sẽ xóa phần nhận xét hiện tại. Tiếp tục?"))return;
+ const changed=m!==mode;mode=m;
+ document.querySelectorAll(".mode button").forEach(b=>b.classList.toggle("active",b.dataset.mode===m));
+ document.querySelectorAll(".preschool-fields,.preschool-report").forEach(x=>x.classList.toggle("hide",m!=="preschool"));
+ document.querySelectorAll(".primary-fields,.primary-report").forEach(x=>x.classList.toggle("hide",m!=="primary"));
+ if(changed){fill("level",LEVELS[m]);fill("book",BOOKS[m]);["strength","improve","next"].forEach(k=>$(k).value="")}
+ rebuild();sync();
+}
+
+/* ---- validation + print ---- */
+function checkIssues(){
+ const miss=[],warn=[];
+ if(!$("student").value.trim())miss.push("Họ và tên học viên");
+ if(!$("teacher").value.trim())warn.push("Chưa nhập tên giáo viên");
+ if(mode==="preschool"){
+  if(!$("topic").value.trim())warn.push("Chưa nhập chủ đề");
+  ["vocabStatus","songStatus","storyStatus","phonicsStatus","video1"].forEach(f=>{if(!$(f).value)warn.push("Chưa chọn: "+STATUS_LABEL[f])});
+ }else{
+  if(!$("listenScore").value.trim())warn.push("Chưa nhập điểm Listening");
+  if(!$("rwScore").value.trim())warn.push("Chưa nhập điểm Reading & Writing");
+  if(!$("video2").value)warn.push("Chưa chọn trạng thái Video Speaking");
+  Object.entries(speakRatings).forEach(([k,v])=>{if(!v)warn.push("Chưa đánh giá Speaking chi tiết: "+k)});
+  const sp=ratings["Speaking"],det=Object.values(speakRatings);
+  if(sp==="Cần cải thiện"&&det.includes("Tốt"))warn.push("Speaking tổng hợp là “Cần cải thiện” nhưng có tiêu chí chi tiết “Tốt”");
+  if(sp==="Tốt"&&det.includes("Cần cải thiện"))warn.push("Speaking tổng hợp là “Tốt” nhưng có tiêu chí chi tiết “Cần cải thiện”");
+ }
+ [["strength","Điểm nổi bật"],["improve","Cần rèn thêm"],["next","Định hướng tháng tới"]].forEach(([f,n])=>{const r=dupReport(f);if(r.length)warn.push("“"+n+"” có thể lặp ý: "+r.join(", "))});
+ Object.entries(ratings).forEach(([k,v])=>{if(!v)warn.push("Dòng “"+k+"” chưa đánh giá nên sẽ bị ẩn khỏi bản in")});
+ if(!$("strength").value.trim())warn.push("Chưa có “Điểm nổi bật”");
+ if(!$("improve").value.trim())warn.push("Chưa có “Cần rèn thêm”");
+ if(!$("next").value.trim())warn.push("Chưa có “Định hướng tháng tới”");
+ return{miss,warn};
+}
+function doPrint(){
+ const {miss,warn}=checkIssues();
+ if(miss.length){alert("Vui lòng nhập: "+miss.join(", "));$("student").focus();return}
+ if(warn.length&&!confirm("Phiếu còn điểm cần kiểm tra:\n\n• "+warn.join("\n• ")+"\n\nVẫn tiếp tục in / lưu PDF?"))return;
+ sync();window.print();
+}
+
+/* ---- drafts (per student + month, stored in this browser) ---- */
+function draftKey(){return ($("student").value.trim()||"(chưa có tên)")+" — "+($("date").value||"").slice(0,7)+" — "+(mode==="preschool"?"Mầm non":"Tiểu học+")}
+function readDrafts(){try{return JSON.parse(LS.get("recDrafts")||"{}")}catch(e){return{}}}
+function refreshDrafts(sel){
+ const d=readDrafts();$("drafts").innerHTML='<option value="">— Chọn nháp đã lưu —</option>'+Object.keys(d).sort().map(k=>`<option></option>`).join("");
+ [...$("drafts").options].slice(1).forEach((o,i)=>{const k=Object.keys(d).sort()[i];o.value=k;o.textContent=k});
+ if(sel)$("drafts").value=sel;
+}
+function saveDraft(){
+ if(!$("student").value.trim()){alert("Nhập họ tên học viên trước khi lưu nháp.");return}
+ const f={};FIELDS.forEach(k=>f[k]=$(k).value);
+ const d=readDrafts(),k=draftKey();d[k]={mode,f,ratings:{...ratings},speak:{...speakRatings}};
+ LS.set("recDrafts",JSON.stringify(d));refreshDrafts(k);alert("Đã lưu nháp trên trình duyệt này:\n"+k);
+}
+function loadDraft(){
+ const k=$("drafts").value;if(!k)return;const s=readDrafts()[k];if(!s)return;
+ setMode(s.mode,true);rebuild();
+ applyRatings("skills",s.ratings);applyRatings("speaking",s.speak);
+ FIELDS.forEach(x=>{if(s.f[x]!==undefined)$(x).value=s.f[x]});
+ renderExtras();sync();
+}
+function deleteDraft(){
+ const k=$("drafts").value;if(!k)return;
+ if(!confirm("Xóa nháp:\n"+k+"?"))return;
+ const d=readDrafts();delete d[k];LS.set("recDrafts",JSON.stringify(d));refreshDrafts();
+}
+
+function exportDrafts(){
+ const d=readDrafts();if(!Object.keys(d).length){alert("Chưa có nháp nào để xuất.");return}
+ const blob=new Blob([JSON.stringify({app:"REC_Report_Builder",v:1,drafts:d},null,1)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="REC_nhap_"+today()+".json";document.body.appendChild(a);a.click();
+ setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
+}
+function importDrafts(file){
+ if(!file)return;const r=new FileReader();
+ r.onload=()=>{try{const j=JSON.parse(r.result),inc=j.drafts||j,d=readDrafts();let n=0;
+  Object.entries(inc).forEach(([k,v])=>{if(v&&typeof v==="object"&&v.f&&(v.mode==="preschool"||v.mode==="primary")){d[k]={mode:v.mode,f:v.f,ratings:v.ratings||{},speak:v.speak||{}};n++}});
+  LS.set("recDrafts",JSON.stringify(d));refreshDrafts();alert("Đã nhập "+n+" nháp.")}catch(e){alert("File không đúng định dạng nháp của công cụ này.")}$("importFile").value=""};
+ r.readAsText(file);
+}
+/* ---- reset ---- */
+function newStudent(){
+ if(!confirm("Xóa dữ liệu học viên hiện tại để nhập học viên mới?\n(Giữ lại: giáo viên, lớp, ngày, level, giáo trình)"))return;
+ ["student","topic","listenScore","rwScore","strength","improve","next"].forEach(k=>$(k).value="");
+ Object.keys(STATUS).forEach(k=>$(k).value="");
+ rebuild();sync();$("student").focus();
+}
+
+/* ---- init ---- */
+Object.entries(STATUS).forEach(([id,arr])=>fill(id,arr,true));
+chips("pos",POS,"strength");chips("dev",DEV,"improve");
+$("targets").innerHTML="";TARGETS.forEach((t,i)=>{const b=document.createElement("button");b.className="chip";b.textContent=TARGET_LABELS[i];$("targets").appendChild(b);mkToggle(b,"next",t,null,"on")});
+chips("home",HOME,"next");$("date").value=today();$("teacher").value=LS.get("recTeacher")||"";$("className").value=LS.get("recClass")||"";
+document.querySelectorAll("label").forEach(l=>{const n=l.nextElementSibling;if(n&&n.id&&/^(INPUT|SELECT|TEXTAREA)$/.test(n.tagName))l.htmlFor=n.id});
+$("signTeacher").addEventListener("input",()=>{$("teacher").value=$("signTeacher").value});
+document.querySelectorAll("input,select,textarea").forEach(x=>{x.addEventListener("input",sync);x.addEventListener("change",sync)});
+document.querySelectorAll(".mode button").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+$("clearComments").onclick=()=>{["strength","improve","next"].forEach(k=>$(k).value="");sync()};
+$("saveDefaults").onclick=()=>{LS.set("recTeacher",$("teacher").value);LS.set("recClass",$("className").value);alert("Đã ghi nhớ Giáo viên và Lớp trên trình duyệt này.")};
+$("level").addEventListener("change",renderExtras);$("exportDrafts").onclick=exportDrafts;$("importDrafts").onclick=()=>$("importFile").click();$("importFile").addEventListener("change",e=>importDrafts(e.target.files[0]));
+["strength","improve","next"].forEach(id=>$(id).insertAdjacentHTML("afterend",`<div class="dupwarn" id="dup_${id}"></div>`));
+$("newStudent").onclick=newStudent;$("saveDraft").onclick=saveDraft;$("loadDraft").onclick=loadDraft;$("delDraft").onclick=deleteDraft;$("printBtn").onclick=doPrint;
+window.addEventListener("beforeprint",()=>{document.title=reportTitle()});
+setMode("preschool",true);refreshDrafts();
+</script></body></html>
